@@ -1,6 +1,6 @@
 import fetchPost from './fetchPost.js';
 
-(async function () {
+async function getData() {
     const data = await fetchPost('https://api.reliefweb.int/v1/reports?appname=apidoc', {
         "limit": 20,
         // "profile": "list",
@@ -40,10 +40,10 @@ import fetchPost from './fetchPost.js';
         }
     });
 
-    data.data.forEach(article => {
-        // console.log();
-        document.body.innerHTML += (article.fields['body-html'] + '<hr/>');
-    });
-
     console.log(data);
-})();
+    return data.data;
+};
+
+const getLocation = () => getData().then(data => data.map(element => element.fields.primary_country.location));
+
+getLocation().then(locations => console.log(locations));
